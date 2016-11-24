@@ -1,6 +1,6 @@
-locationentity.locationentity_type.*:
+locationentity.type.*:
   type: config_entity
-  label: 'Location type config'
+  label: 'Location type'
   mapping:
     id:
       type: string

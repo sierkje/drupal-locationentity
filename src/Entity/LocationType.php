@@ -22,7 +22,7 @@ use Drupal\locationentity\LocationTypeInterface;
  *       "html" = "Drupal\locationentity\LocationTypeHtmlRouteProvider",
  *     },
  *   },
- *   config_prefix = "locationentity_type",
+ *   config_prefix = "type",
  *   admin_permission = "administer site configuration",
  *   bundle_of = "locationentity",
  *   entity_keys = {

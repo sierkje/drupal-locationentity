@@ -5,7 +5,6 @@ package: Location
 dependencies:
   - address
   - geocoder
-  - node
 
 # @todo Remove lines below before 8.x-1.x.
 version: 8.x-0.x-dev

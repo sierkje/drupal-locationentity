@@ -1,19 +1,38 @@
-add location entities:
-  title: 'Create new Location entities'
-
-administer location entities:
-  title: 'Administer Location entities'
-  description: 'Allow to access the administration form to configure Location entities.'
+bypass locationentity access:
+  title: 'Bypass location access control'
+  description: 'View, edit and delete all locations and location configuration regardless of permission restrictions.'
   restrict access: true
 
-delete location entities:
-  title: 'Delete Location entities'
+administer locationentity_type:
+  title: 'Administer location types'
+  description: 'Maintain the available location types and the fields that are associated with those types.'
+  restrict access: true
 
-edit location entities:
-  title: 'Edit Location entities'
+administer locationentity:
+  title: 'Administer locations'
+  description: 'Promote, change ownership, edit revisions, and perform other tasks across all location types.'
+  restrict access: true
 
-view published location entities:
-  title: 'View published Location entities'
+add locationentity:
+  title: 'Create new locations of any type'
 
-view unpublished location entities:
-  title: 'View unpublished Location entities'
+delete any locationentity:
+  title: 'Delete any location of any type'
+
+delete own locationentity:
+  title: 'Delete own locations of any type'
+
+edit any locationentity:
+  title: 'Edit any location of any type'
+
+edit own locationentity:
+  title: 'Edit own locations of any type'
+
+view published locationentity:
+  title: 'View published locations of any type'
+
+view any unpublished locationentity:
+  title: 'View any unpublished location of any type'
+
+view own unpublished locationentity:
+  title: 'View own unpublished locations of any type'

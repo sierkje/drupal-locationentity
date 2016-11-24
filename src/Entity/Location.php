@@ -36,7 +36,7 @@ use Drupal\user\UserInterface;
  *     },
  *   },
  *   base_table = "locationentity",
- *   admin_permission = "administer location entities",
+ *   admin_permission = "administer locationentity",
  *   entity_keys = {
  *     "id" = "id",
  *     "bundle" = "type",

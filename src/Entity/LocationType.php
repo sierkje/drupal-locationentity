@@ -23,7 +23,7 @@ use Drupal\locationentity\LocationTypeInterface;
  *     },
  *   },
  *   config_prefix = "type",
- *   admin_permission = "administer site configuration",
+ *   admin_permission = "administer locationentity_type",
  *   bundle_of = "locationentity",
  *   entity_keys = {
  *     "id" = "id",

@@ -17,19 +17,46 @@ class LocationAccessControlHandler extends EntityAccessControlHandler {
    * {@inheritdoc}
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
+    if ($account->hasPermission('bypass locationentity access')) {
+      return AccessResult::allowedIfHasPermission($account, 'bypass locationentity access');
+    }
+
+    if ($account->hasPermission('administer locationentity')) {
+      return AccessResult::allowedIfHasPermission($account, 'administer locationentity');
+    }
+
     /** @var \Drupal\locationentity\LocationInterface $entity */
     switch ($operation) {
       case 'view':
-        if (!$entity->isPublished()) {
-          return AccessResult::allowedIfHasPermission($account, 'view unpublished location entities');
+      if (!$entity->isPublished()) {
+          if ($entity->getOwnerId() === $account->id()) {
+            if ($account->hasPermission('view own unpublished locationentity')) {
+              return AccessResult::allowedIfHasPermission($account, 'view own unpublished locationentity');
+            }
+          }
+
+          return AccessResult::allowedIfHasPermission($account, 'view any unpublished locationentity');
         }
-        return AccessResult::allowedIfHasPermission($account, 'view published location entities');
+
+        return AccessResult::allowedIfHasPermission($account, 'view published locationentity');
 
       case 'update':
-        return AccessResult::allowedIfHasPermission($account, 'edit location entities');
+        if ($entity->getOwnerId() === $account->id()) {
+          if ($account->hasPermission('edit own locationentity')) {
+            return AccessResult::allowedIfHasPermission($account, 'edit own locationentity');
+          }
+        }
+
+        return AccessResult::allowedIfHasPermission($account, 'edit any locationentity');
 
       case 'delete':
-        return AccessResult::allowedIfHasPermission($account, 'delete location entities');
+        if ($entity->getOwnerId() === $account->id()) {
+          if ($account->hasPermission('delete own locationentity')) {
+            return AccessResult::allowedIfHasPermission($account, 'delete own locationentity');
+          }
+        }
+
+        return AccessResult::allowedIfHasPermission($account, 'delete any locationentity');
     }
 
     // Unknown operation, no opinion.
@@ -40,7 +67,15 @@ class LocationAccessControlHandler extends EntityAccessControlHandler {
    * {@inheritdoc}
    */
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL) {
-    return AccessResult::allowedIfHasPermission($account, 'add location entities');
+    if ($account->hasPermission('bypass locationentity access')) {
+      return AccessResult::allowedIfHasPermission($account, 'bypass locationentity access');
+    }
+
+    if ($account->hasPermission('administer locationentity')) {
+      return AccessResult::allowedIfHasPermission($account, 'administer locationentity');
+    }
+
+    return AccessResult::allowedIfHasPermission($account, 'add locationentity entities');
   }
 
 }

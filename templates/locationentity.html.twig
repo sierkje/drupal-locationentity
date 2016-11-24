@@ -1,0 +1,22 @@
+{#
+/**
+ * @file locationentity.html.twig
+ * Default theme implementation to present Location data.
+ *
+ * This template is used when viewing Location pages.
+ *
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ * - attributes: HTML attributes for the container element.
+ *
+ * @see template_preprocess_locationentity()
+ *
+ * @ingroup themeable
+ */
+#}
+<div{{ attributes.addClass('locationentity') }}>
+  {% if content %}
+    {{- content -}}
+  {% endif %}
+</div>

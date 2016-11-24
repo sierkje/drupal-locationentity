@@ -43,20 +43,20 @@ function template_preprocess_locationentity(array &$variables) {
 * @see block_content_add_page()
 */
 function template_preprocess_locationentity_content_add_list(&$variables) {
-  $variables['types'] = array();
+  $variables['types'] = [];
   $query = \Drupal::request()->query->all();
   foreach ($variables['content'] as $type) {
-    $variables['types'][$type->id()] = array(
-      'link' => Link::fromTextAndUrl($type->label(), new Url('entity.locationentity.add_form', array(
+    $variables['types'][$type->id()] = [
+      'link' => Link::fromTextAndUrl($type->label(), new Url('entity.locationentity.add_form', [
         'locationentity_type' => $type->id()
-      ), array('query' => $query))),
-      'description' => array(
+      ], ['query' => $query])),
+      'description' => [
       '#markup' => $type->label(),
-      ),
+      ],
       'title' => $type->label(),
-      'localized_options' => array(
+      'localized_options' => [
       'query' => $query,
-      ),
-    );
+      ],
+    ];
   }
 }

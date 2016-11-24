@@ -45,7 +45,7 @@ function locationentity_theme() {
 * Implements hook_theme_suggestions_HOOK().
 */
 function locationentity_theme_suggestions_locationentity(array $variables) {
-  $suggestions = array();
+  $suggestions = [];
   $entity = $variables['elements']['#locationentity'];
   $sanitized_view_mode = strtr($variables['elements']['#view_mode'], '.', '_');
 

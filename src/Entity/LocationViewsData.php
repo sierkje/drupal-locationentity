@@ -15,11 +15,11 @@ class LocationViewsData extends EntityViewsData implements EntityViewsDataInterf
   public function getViewsData() {
     $data = parent::getViewsData();
 
-    $data['locationentity']['table']['base'] = array(
+    $data['locationentity']['table']['base'] = [
       'field' => 'id',
       'title' => $this->t('Location'),
       'help' => $this->t('The Location ID.'),
-    );
+    ];
 
     return $data;
   }

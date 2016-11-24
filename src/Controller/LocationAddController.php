@@ -50,14 +50,14 @@ class LocationAddController extends ControllerBase {
         return $this->addForm($type, $request);
       }
       if (count($types) === 0) {
-        return array(
+        return [
           '#markup' => $this->t('You have not created any %bundle types yet. @link to add a new type.', [
             '%bundle' => 'Location',
             '@link' => $this->l($this->t('Go to the type creation page'), Url::fromRoute('entity.locationentity_type.add_form')),
           ]),
-        );
+        ];
       }
-      return array('#theme' => 'locationentity_content_add_list', '#content' => $types);
+      return ['#theme' => 'locationentity_content_add_list', '#content' => $types];
     }
 
     /**
@@ -72,9 +72,9 @@ class LocationAddController extends ControllerBase {
      *   A form array as expected by drupal_render().
      */
     public function addForm(EntityInterface $locationentity_type, Request $request) {
-      $entity = $this->storage->create(array(
+      $entity = $this->storage->create([
         'type' => $locationentity_type->id()
-      ));
+      ]);
       return $this->entityFormBuilder()->getForm($entity);
     }
 
@@ -89,7 +89,7 @@ class LocationAddController extends ControllerBase {
      */
     public function getAddFormTitle(EntityInterface $locationentity_type) {
       return t('Create of bundle @label',
-        array('@label' => $locationentity_type->label())
+        ['@label' => $locationentity_type->label()]
       );
     }
 

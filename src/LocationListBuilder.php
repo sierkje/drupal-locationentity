@@ -32,9 +32,9 @@ class LocationListBuilder extends EntityListBuilder {
     $row['name'] = $this->l(
       $entity->label(),
       new Url(
-        'entity.locationentity.edit_form', array(
+        'entity.locationentity.edit_form', [
           'locationentity' => $entity->id(),
-        )
+        ]
       )
     );
     return $row + parent::buildRow($entity);

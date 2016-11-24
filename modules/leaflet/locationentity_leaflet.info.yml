@@ -1,0 +1,12 @@
+name: Location Entity Leaflet Maps
+type: module
+description: Provides leaflet maps for location entities.
+package: Location
+dependencies:
+  - leaflet
+  - locationentity
+
+# @todo Remove lines below before 8.x-1.x.
+version: 8.x-0.x-dev
+core: 8.x
+project: locationentity

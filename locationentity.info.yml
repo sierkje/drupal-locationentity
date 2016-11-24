@@ -1,0 +1,13 @@
+name: Location Entity
+type: module
+description: Provides an entity to represent content with an address.
+package: Location
+dependencies:
+  - address
+  - geocoder
+  - node
+
+# @todo Remove lines below before 8.x-1.x.
+version: 8.x-0.x-dev
+core: 8.x
+project: locationentity

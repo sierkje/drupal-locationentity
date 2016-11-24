@@ -1,0 +1,50 @@
+{
+  "name": "drupal/locationentity",
+  "description": "Provides an entity to represent content with an address.",
+  "type": "drupal-module",
+  "homepage": "https://drupal.org/sandbox/sierk/2814081",
+  "authors": [
+    {
+      "name": "Sierk Beij",
+      "email": "sierk@cococollective.org",
+      "homepage": "https://drupal.org/u/sierkje"
+    }
+  ],
+  "support": {
+    "issues": "https://drupal.org/project/issues/2814081",
+    "source": "http://cgit.drupalcode.org/sandbox-sierk-2814081"
+  },
+  "license": "GPL-2.0+",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.9",
+    "drupal/address": "^1.0.0",
+    "drupal/geocoder": "^2.0.0"
+  },
+  "require-dev": {
+    "drupal/entity_browser": "^1.0.0",
+    "drupal/inline_entity_form": "^1.0.0",
+    "drupal/leaflet": "^1.0.0"
+  },
+  "suggest": {
+    "drupal/entity_browser": "Required by drupal/locationentity_browser.",
+    "drupal/inline_entity_form": "Required by drupal/locationentity_browser.",
+    "drupal/leaflet": "Required by drupal/locationentity_leaflet."
+  },
+  "replace": {
+    "drupal/locationentity_browser": "self.version",
+    "drupal/locationentity_leaflet": "self.version"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "extra": {
+    "branch-alias": {
+      "dev-8.x-0.x": "0.x-dev"
+    }
+  }
+}

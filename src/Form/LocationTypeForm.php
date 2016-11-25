@@ -2,41 +2,68 @@
 
 namespace Drupal\locationentity\Form;
 
-use Drupal\Core\Entity\EntityForm;
+use Drupal\Core\Entity\BundleEntityFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\locationentity\Entity\LocationType;
 
 /**
  * Class LocationTypeForm.
  *
  * @package Drupal\locationentity\Form
  */
-class LocationTypeForm extends EntityForm {
+class LocationTypeForm extends BundleEntityFormBase {
+
   /**
    * {@inheritdoc}
    */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
-    $locationentity_type = $this->entity;
+    /** @var \Drupal\locationentity\LocationTypeInterface $type */
+    $type = $this->entity;
+
     $form['label'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Label'),
+      '#title' => $this->t('Name'),
       '#maxlength' => 255,
-      '#default_value' => $locationentity_type->label(),
-      '#description' => $this->t("Label for the Location type."),
+      '#default_value' => $type->label(),
+      '#description' => $this->t('Name of the location type.'),
       '#required' => TRUE,
     ];
 
     $form['id'] = [
       '#type' => 'machine_name',
-      '#default_value' => $locationentity_type->id(),
+      '#default_value' => $type->id(),
       '#machine_name' => [
-        'exists' => '\Drupal\locationentity\Entity\LocationType::load',
+        'exists' => [LocationType::class, 'load'],
+        'source' => ['label'],
       ],
-      '#disabled' => !$locationentity_type->isNew(),
+      '#disabled' => !$type->isNew(),
+      '#description' => t('A unique machine-readable name for this location type. It must only contain lowercase letters, numbers, and underscores. This name will be used for constructing the URL of the <em>%location-add</em> page, in which underscores will be converted into hyphens.', [
+        '%location-add' => t('Add location'),
+      ]),
     ];
 
-    /* You will need additional form elements for your custom properties. */
+    $form['description'] = [
+      '#title' => t('Description'),
+      '#type' => 'textarea',
+      '#default_value' => $type->getDescription(),
+      '#description' => $this->t('This text will be displayed on the <em>%location-add</em> page.', [
+        '%location-add' => t('Add location'),
+      ]),
+      '#required' => TRUE,
+    ];
+
+    if (!$type->isNew()) {
+      $form['uuid'] = [
+        '#type' => 'textfield',
+        '#title' => $this->t('UUID'),
+        '#maxlength' => 255,
+        '#default_value' => $type->uuid(),
+        '#description' => $this->t('UUID of the location type.'),
+        '#disabled' => TRUE,
+      ];
+    }
 
     return $form;
   }

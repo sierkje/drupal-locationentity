@@ -85,8 +85,10 @@ class LocationAdminController implements ContainerInjectionInterface {
    */
   public function __construct(EntityStorageInterface $storage, EntityAccessControlHandlerInterface $access_control_handler, EntityStorageInterface $type_storage, EntityTypeInterface $type_definition, RendererInterface $renderer, TranslationInterface $string_translation, EntityFormBuilderInterface $entity_form_builder) {
     $this->storage = $storage;
+    $this->accessControlHandler = $access_control_handler;
     $this->typeStorage = $type_storage;
     $this->typeDefinition = $type_definition;
+    $this->renderer = $renderer;
     $this->stringTranslation = $string_translation;
     $this->entityFormBuilder = $entity_form_builder;
   }

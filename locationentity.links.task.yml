@@ -1,17 +1,18 @@
-# Location routing definition
 entity.locationentity.canonical:
   route_name: entity.locationentity.canonical
   base_route: entity.locationentity.canonical
   title: 'View'
-
+entity.locationentity.collection:
+  route_name: entity.locationentity.collection
+  base_route: system.admin_content
+  title: 'Locations'
 entity.locationentity.edit_form:
   route_name: entity.locationentity.edit_form
   base_route: entity.locationentity.canonical
-  title: Edit
-
+  title: 'Edit'
 entity.locationentity.delete_form:
   route_name:  entity.locationentity.delete_form
   base_route:  entity.locationentity.canonical
-  title: Delete
+  title: 'Delete'
   weight: 10
 

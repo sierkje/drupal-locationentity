@@ -3,13 +3,18 @@
 namespace Drupal\locationentity\Controller;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\EntityAccessControlHandlerInterface;
 use Drupal\Core\Entity\EntityFormBuilderInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\Core\Link;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\Core\Url;
+use Drupal\locationentity\LocationTypeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Returns responses for location routes.
@@ -26,11 +31,32 @@ class LocationAdminController implements ContainerInjectionInterface {
   protected $storage;
 
   /**
+   * The location access control handler.
+   *
+   * @var \Drupal\Core\Entity\EntityAccessControlHandlerInterface
+   */
+  protected $accessControlHandler;
+
+  /**
    * The location type storage.
    *
    * @var \Drupal\Core\Entity\EntityStorageInterface
    */
   protected $typeStorage;
+
+  /**
+   * The location type definition.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeInterface
+   */
+  protected $typeDefinition;
+
+  /**
+   * The renderer service.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
 
   /**
    * The entity form builder service.
@@ -44,16 +70,23 @@ class LocationAdminController implements ContainerInjectionInterface {
    *
    * @param \Drupal\Core\Entity\EntityStorageInterface $storage
    *   The location storage.
+   * @param \Drupal\Core\Entity\EntityAccessControlHandlerInterface $access_control_handler
+   *   The location access control handler.
    * @param \Drupal\Core\Entity\EntityStorageInterface $type_storage
    *   The location type storage.
+   * @param \Drupal\Core\Entity\EntityTypeInterface $type_definition
+   *   The location type definition.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer service.
    * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
    *   The string translation service.
    * @param \Drupal\Core\Entity\EntityFormBuilderInterface $entity_form_builder
    *   The entity form builder service.
    */
-  public function __construct(EntityStorageInterface $storage, EntityStorageInterface $type_storage, TranslationInterface $string_translation, EntityFormBuilderInterface $entity_form_builder) {
+  public function __construct(EntityStorageInterface $storage, EntityAccessControlHandlerInterface $access_control_handler, EntityStorageInterface $type_storage, EntityTypeInterface $type_definition, RendererInterface $renderer, TranslationInterface $string_translation, EntityFormBuilderInterface $entity_form_builder) {
     $this->storage = $storage;
     $this->typeStorage = $type_storage;
+    $this->typeDefinition = $type_definition;
     $this->stringTranslation = $string_translation;
     $this->entityFormBuilder = $entity_form_builder;
   }
@@ -66,14 +99,20 @@ class LocationAdminController implements ContainerInjectionInterface {
     $entity_type_manager = $container->get('entity_type.manager');
     /** @var \Drupal\Core\Entity\EntityStorageInterface $storage */
     $storage = $entity_type_manager->getStorage('locationentity');
+    /** @var \Drupal\Core\Entity\EntityAccessControlHandlerInterface $access_control_handler */
+    $access_control_handler = $entity_type_manager->getAccessControlHandler('locationentity');
     /** @var \Drupal\Core\Entity\EntityStorageInterface $type_storage */
     $type_storage = $entity_type_manager->getStorage('locationentity_type');
+    /** @var \Drupal\Core\Entity\EntityTypeInterface $type_definition */
+    $type_definition = $entity_type_manager->getDefinition('locationentity_type');
+    /** @var \Drupal\Core\Render\RendererInterface $renderer */
+    $renderer = $container->get('renderer');
     /** @var \Drupal\Core\StringTranslation\TranslationInterface $string_translation */
     $string_translation = $container->get('string_translation');
     /** @var \Drupal\Core\Entity\EntityFormBuilderInterface $entity_form_builder */
     $entity_form_builder = $container->get('entity.form_builder');
 
-    return new static($storage, $type_storage, $string_translation, $entity_form_builder);
+    return new static($storage, $access_control_handler, $type_storage, $type_definition, $renderer, $string_translation, $entity_form_builder);
   }
 
   /**
@@ -109,33 +148,58 @@ class LocationAdminController implements ContainerInjectionInterface {
   /**
    * Displays links to the location creation forms for types.
    *
-   * Presents a creation form if only one type is available.
+   * Redirects to the creation form if only one type is available.
    *
-   * @return array
+   * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
    *   A render array with links for the types that can be added, or (if only
-   *   one type is available) a form array with the creation form for that type.
+   *   one type is available) a RedirectResponse to the form for that type.
    */
   public function addPage() {
-    $types = $this->typeStorage->loadMultiple();
+    $build = [
+      '#theme' => 'locationentity_add_list',
+      '#cache' => ['tags' => $this->typeDefinition->getListCacheTags()],
+    ];
 
-    if ($types && count($types) == 1) {
-      $type = reset($types);
+    $content = [];
 
-      return $this->addForm($type);
+    // Only use types the user has access to.
+    foreach ($this->typeStorage->loadMultiple() as $type) {
+      /** @var \Drupal\locationentity\LocationTypeInterface $type */
+      $access = $this->createAccess($type);
+      if ($access->isAllowed()) {
+        $content[$type->id()] = $type;
+      }
+      $this->renderer->addCacheableDependency($build, $access);
     }
 
-    if (count($types) === 0) {
-      $link_text = $this->t('Add a new location type');
-      $link_route_name = 'entity.locationentity_type.add_form';
+    // Bypass the listing if only one type is available.
+    if (count($content) == 1) {
+      $type = array_shift($content);
 
-      return [
-        '#markup' => $this->t('No location types are available. @link.', [
-          '@link' => Link::createFromRoute($link_text, $link_route_name),
-        ]),
-      ];
+      $name = 'entity.locationentity.add_form';
+      $parameters = ['locationentity_type' => $type->id()];
+      $options = ['absolute' => TRUE];
+
+      return new RedirectResponse(Url::fromRoute($name, $parameters, $options));
     }
 
-    return ['#theme' => 'locationentity_add_list', '#content' => $types];
+    $build['#content'] = $content;
+
+    return $build;
+  }
+
+  /**
+   * Checks location create access.
+   *
+   * @param \Drupal\locationentity\LocationTypeInterface $locationentity_type
+   *   The entity representing the type of the new location.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   An AccessResultInterface object.
+   */
+  protected function createAccess(LocationTypeInterface $locationentity_type) {
+    return $this->accessControlHandler
+      ->createAccess($locationentity_type->id(), NULL, [], TRUE);
   }
 
 }

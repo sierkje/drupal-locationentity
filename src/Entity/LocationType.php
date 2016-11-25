@@ -31,11 +31,11 @@ use Drupal\locationentity\LocationTypeInterface;
  *     "uuid" = "uuid"
  *   },
  *   links = {
- *     "canonical" = "/admin/structure/locationentity/locationentity_type/{locationentity_type}",
- *     "add-form" = "/admin/structure/locationentity/locationentity_type/add",
- *     "edit-form" = "/admin/structure/locationentity/locationentity_type/{locationentity_type}/edit",
- *     "delete-form" = "/admin/structure/locationentity/locationentity_type/{locationentity_type}/delete",
- *     "collection" = "/admin/structure/locationentity/locationentity_type"
+ *     "add-form" = "/admin/structure/locationentity/types/add",
+ *     "canonical" = "/admin/structure/locationentity/types/manage/{locationentity_type}",
+ *     "collection" = "/admin/structure/locationentity/types"
+ *     "delete-form" = "/admin/structure/locationentity/types/manage/{locationentity_type}/delete",
+ *     "edit-form" = "/admin/structure/locationentity/types/manage/{locationentity_type}/edit",
  *   }
  * )
  */

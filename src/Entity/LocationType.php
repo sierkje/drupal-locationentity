@@ -33,7 +33,7 @@ use Drupal\locationentity\LocationTypeInterface;
  *   links = {
  *     "add-form" = "/admin/structure/locationentity/types/add",
  *     "canonical" = "/admin/structure/locationentity/types/manage/{locationentity_type}",
- *     "collection" = "/admin/structure/locationentity/types"
+ *     "collection" = "/admin/structure/locationentity/types",
  *     "delete-form" = "/admin/structure/locationentity/types/manage/{locationentity_type}/delete",
  *     "edit-form" = "/admin/structure/locationentity/types/manage/{locationentity_type}/edit",
  *   }

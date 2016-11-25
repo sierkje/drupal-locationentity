@@ -57,7 +57,7 @@ class LocationHtmlRouteProvider extends AdminHtmlRouteProvider {
           '_entity_list' => $entity_type_id,
           '_title' => "{$entity_type->getLabel()} list",
         ])
-        ->setRequirement('_permission', 'view location entities')
+        ->setRequirement('_permission', 'access locationentity overview')
         ->setOption('_admin_route', TRUE);
 
       return $route;

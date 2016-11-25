@@ -13,6 +13,9 @@ administer locationentity:
   description: 'Promote, change ownership, edit revisions, and perform other tasks across all location types.'
   restrict access: true
 
+access locationentity overview:
+  title: 'Access the location overview page'
+
 add locationentity:
   title: 'Create new locations of any type'
 

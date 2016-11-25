@@ -87,7 +87,7 @@ class LocationController extends ControllerBase {
      * @return string
      *   The page title.
      */
-    public function getAddFormTitle(EntityInterface $locationentity_type) {
+    public function addFormTitle(EntityInterface $locationentity_type) {
       return t('Create of bundle @label',
         ['@label' => $locationentity_type->label()]
       );

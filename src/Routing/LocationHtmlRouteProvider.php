@@ -71,7 +71,7 @@ class LocationHtmlRouteProvider extends AdminHtmlRouteProvider {
       $route
         ->setDefaults([
           '_controller' => LocationController::class .'::addForm',
-          '_title_callback' => LocationController::class .'::getAddFormTitle',
+          '_title_callback' => LocationController::class .'::addFormTitle',
         ])
         ->setRequirement('_entity_create_access', $entity_type_id . ':{' . $bundle_entity_type_id . '}');
       $parameters[$bundle_entity_type_id] = ['type' => 'entity:' . $bundle_entity_type_id];

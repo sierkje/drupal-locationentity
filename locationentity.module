@@ -97,7 +97,7 @@ function template_preprocess_locationentity_add_list(&$variables) {
       'id' => $type->id(),
       'label' => $type->label(),
       'description' => ['#markup' => $type->getDescription()],
-      'add_link' => Link::createFromRoute($type->label(), 'entity.locationentity.add_form', [
+      'add_link' => Link::createFromRoute($type->label(), 'entity.locationentity_type.add_form', [
         'locationentity_type' => $type->id(),
       ]),
     ];

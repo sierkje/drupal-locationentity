@@ -182,7 +182,7 @@ class LocationAdminController implements ContainerInjectionInterface {
       $parameters = ['locationentity_type' => $type->id()];
       $options = ['absolute' => TRUE];
 
-      return new RedirectResponse(Url::fromRoute($name, $parameters, $options));
+      return new RedirectResponse(Url::fromRoute($name, $parameters, $options)->toString());
     }
 
     $build['#content'] = $content;

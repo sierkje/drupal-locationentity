@@ -1,23 +1,33 @@
 {#
 /**
  * @file
- * Default theme implementation to present a list of custom content entity types/bundles.
+ * Default theme implementation to list types available for adding locations.
  *
  * Available variables:
- * - types: A collection of all the available custom entity types/bundles.
- *   Each type/bundle contains the following:
- *   - link: A link to add a content entity of this type.
- *   - description: A description of this content entity types/bundle.
+ * - types: A collection of all the available location types.
+ *   Each type contains the following:
+     - id: The machine-readable name of this location type.
+     - label: The name of this location type.
+ *   - description: A description of this location type.
+ *   - add_link: A link to add a location of this type.
  *
  * @see template_preprocess_locationentity_add_list()
  *
  * @ingroup themeable
  */
 #}
-{% spaceless %}
-  <dl>
-    {% for type in types %}
-      <dt>{{ type.link }}</dt>
-    {% endfor %}
-  </dl>
-{% endspaceless %}
+{% if types is not empty %}
+    <dl>
+        {% for type in types %}
+            <dt>{{ type.add_link }}</dt>
+            <dd>{{ type.description }}</dd>
+        {% endfor %}
+    </dl>
+{% else %}
+    <p>
+        {% set create_type = path('entity.locationentity_type.add_form') %}
+        {% trans %}
+        There are no location types available. <a href="{{ create_content }}">Add a new location type</a>.
+        {% endtrans %}
+    </p>
+{% endif %}

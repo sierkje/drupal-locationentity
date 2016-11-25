@@ -5,6 +5,8 @@
  * Contains locationentity.module..
  */
 
+use Drupal\Core\Render\Element;
+use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
@@ -30,13 +32,11 @@ function locationentity_theme() {
   $theme = [];
   $theme['locationentity'] = [
     'render element' => 'elements',
-    'file' => 'locationentity.page.inc',
     'template' => 'locationentity',
   ];
   $theme['locationentity_add_list'] = [
     'render element' => 'content',
     'variables' => ['content' => NULL],
-    'file' => 'locationentity.page.inc',
   ];
   return $theme;
 }
@@ -55,4 +55,51 @@ function locationentity_theme_suggestions_locationentity(array $variables) {
   $suggestions[] = 'locationentity__' . $entity->id();
   $suggestions[] = 'locationentity__' . $entity->id() . '__' . $sanitized_view_mode;
   return $suggestions;
+}
+
+/**
+ * Prepares variables for Location templates.
+ *
+ * Default template: locationentity.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the user information and any
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_locationentity(array &$variables) {
+  // Fetch Location Entity Object.
+  $locationentity = $variables['elements']['#locationentity'];
+
+  // Helpful $content variable for templates.
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for a custom entity type creation list templates.
+ *
+ * Default template: locationentity-add-list.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - content: An array of locationentity-types.
+ *
+ * @see block_content_add_page()
+ */
+function template_preprocess_locationentity_add_list(&$variables) {
+  $variables['types'] = [];
+
+  foreach ($variables['content'] as $type) {
+    /** @var \Drupal\locationentity\LocationTypeInterface $type */
+    $variables['types'][$type->id()] = [
+      'id' => $type->id(),
+      'label' => $type->label(),
+      'description' => ['#markup' => $type->getDescription()],
+      'add_link' => Link::createFromRoute($type->label(), 'entity.locationentity.add_form', [
+        'locationentity_type' => $type->id(),
+      ]),
+    ];
+  }
 }

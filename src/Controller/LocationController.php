@@ -57,7 +57,7 @@ class LocationController extends ControllerBase {
           ]),
         ];
       }
-      return ['#theme' => 'locationentity_content_add_list', '#content' => $types];
+      return ['#theme' => 'locationentity_add_list', '#content' => $types];
     }
 
     /**

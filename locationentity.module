@@ -33,7 +33,7 @@ function locationentity_theme() {
     'file' => 'locationentity.page.inc',
     'template' => 'locationentity',
   ];
-  $theme['locationentity_content_add_list'] = [
+  $theme['locationentity_add_list'] = [
     'render element' => 'content',
     'variables' => ['content' => NULL],
     'file' => 'locationentity.page.inc',

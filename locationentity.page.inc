@@ -34,7 +34,7 @@ function template_preprocess_locationentity(array &$variables) {
 /**
 * Prepares variables for a custom entity type creation list templates.
 *
-* Default template: locationentity-content-add-list.html.twig.
+* Default template: locationentity-add-list.html.twig.
 *
 * @param array $variables
 *   An associative array containing:
@@ -42,7 +42,7 @@ function template_preprocess_locationentity(array &$variables) {
 *
 * @see block_content_add_page()
 */
-function template_preprocess_locationentity_content_add_list(&$variables) {
+function template_preprocess_locationentity_add_list(&$variables) {
   $variables['types'] = [];
   $query = \Drupal::request()->query->all();
   foreach ($variables['content'] as $type) {

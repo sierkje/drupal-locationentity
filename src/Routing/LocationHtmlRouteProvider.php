@@ -28,7 +28,7 @@ class LocationHtmlRouteProvider implements EntityRouteProviderInterface {
     $this->entityType = $entity_type;
     $prefix = 'entity.locationentity.';
 
-    $collection = (new RouteCollection());
+    $collection = new RouteCollection();
     $collection->add($prefix . 'add_form', $this->addFormRoute());
     $collection->add($prefix . 'add_page', $this->addPageRoute());
     $collection->add($prefix . 'canonical', $this->canonicalRoute());
@@ -46,7 +46,7 @@ class LocationHtmlRouteProvider implements EntityRouteProviderInterface {
    *   The generated route.
    */
   protected function addFormRoute() {
-    return (new Route($this->getPath('add_form')))
+    return (new Route($this->getPath('add-form')))
       ->setDefaults([
         '_controller' => LocationAdminController::class .'::addForm',
         '_title_callback' => LocationAdminController::class .'::addFormTitle',
@@ -68,7 +68,7 @@ class LocationHtmlRouteProvider implements EntityRouteProviderInterface {
    *   The generated route.
    */
   protected function addPageRoute() {
-    return (new Route($this->getPath('add_page')))
+    return (new Route($this->getPath('add-page')))
       ->setDefaults([
         '_controller' => LocationAdminController::class .'::addPage',
         '_title' => 'Add location',

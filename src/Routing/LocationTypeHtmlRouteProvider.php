@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\locationentity;
+namespace Drupal\locationentity\Routing;
 
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;

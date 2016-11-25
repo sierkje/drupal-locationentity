@@ -43,7 +43,7 @@ class LocationController extends ControllerBase {
      *   A render array for a list of the locationentity bundles/types that can be added or
      *   if there is only one type/bunlde defined for the site, the function returns the add page for that bundle/type.
      */
-    public function add(Request $request) {
+    public function addPage(Request $request) {
       $types = $this->typeStorage->loadMultiple();
       if ($types && count($types) == 1) {
         $type = reset($types);

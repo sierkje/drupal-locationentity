@@ -92,7 +92,7 @@ class LocationHtmlRouteProvider extends AdminHtmlRouteProvider {
       $route = new Route($entity_type->getLinkTemplate('add-page'));
       $route
         ->setDefaults([
-          '_controller' => LocationController::class .'::add',
+          '_controller' => LocationController::class .'::addPage',
           '_title' => "Add {$entity_type->getLabel()}",
         ])
         ->setRequirement('_entity_create_access', $entity_type->id())

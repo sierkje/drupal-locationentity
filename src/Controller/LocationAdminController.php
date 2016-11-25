@@ -92,7 +92,7 @@ class LocationAdminController implements ContainerInjectionInterface {
   }
 
   /**
-   * Returns the creation form page title for for locations of given type.
+   * Returns the creation form page title for locations of given type.
    *
    * @param EntityInterface $locationentity_type
    *   The entity representing the type of the new location.

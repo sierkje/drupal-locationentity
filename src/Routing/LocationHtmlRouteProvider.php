@@ -21,32 +21,22 @@ class LocationHtmlRouteProvider extends AdminHtmlRouteProvider {
 
     $entity_type_id = $entity_type->id();
 
-    if ($collection_route = $this->getCollectionRoute($entity_type)) {
-      $collection->add("entity.{$entity_type_id}.collection", $collection_route);
-    }
-
     if ($add_form_route = $this->getAddFormRoute($entity_type)) {
       $collection->add("entity.{$entity_type_id}.add_form", $add_form_route);
     }
 
     $add_page_route = $this->getAddPageRoute($entity_type);
-    $collection->add("$entity_type_id.add_page", $add_page_route);
+    $collection->add("entity.{$entity_type_id}.add_page", $add_page_route);
 
-    if ($settings_form_route = $this->getSettingsFormRoute($entity_type)) {
-      $collection->add("$entity_type_id.settings", $settings_form_route);
+    if ($collection_route = $this->getCollectionRoute($entity_type)) {
+      $collection->add("entity.{$entity_type_id}.collection", $collection_route);
     }
 
     return $collection;
   }
 
   /**
-   * Gets the collection route.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
-   *   The entity type.
-   *
-   * @return \Symfony\Component\Routing\Route|null
-   *   The generated route, if available.
+   * {@inheritdoc}
    */
   protected function getCollectionRoute(EntityTypeInterface $entity_type) {
     if ($entity_type->hasLinkTemplate('collection') && $entity_type->hasListBuilderClass()) {
@@ -65,13 +55,7 @@ class LocationHtmlRouteProvider extends AdminHtmlRouteProvider {
   }
 
   /**
-   * Gets the add-form route.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
-   *   The entity type.
-   *
-   * @return \Symfony\Component\Routing\Route|null
-   *   The generated route, if available.
+   * {@inheritdoc}
    */
   protected function getAddFormRoute(EntityTypeInterface $entity_type) {
     if ($entity_type->hasLinkTemplate('add-form')) {
@@ -100,45 +84,17 @@ class LocationHtmlRouteProvider extends AdminHtmlRouteProvider {
   }
 
   /**
-   * Gets the add page route.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
-   *   The entity type.
-   *
-   * @return \Symfony\Component\Routing\Route|null
-   *   The generated route, if available.
+   * {@inheritdoc}
    */
   protected function getAddPageRoute(EntityTypeInterface $entity_type) {
-    $route = new Route("/admin/structure/{$entity_type->id()}/add");
-    $route
-      ->setDefaults([
-        '_controller' => 'Drupal\locationentity\Controller\LocationAddController::add',
-        '_title' => "Add {$entity_type->getLabel()}",
-      ])
-      ->setRequirement('_entity_create_access', $entity_type->id())
-      ->setOption('_admin_route', TRUE);
-
-    return $route;
-  }
-
-  /**
-   * Gets the settings form route.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
-   *   The entity type.
-   *
-   * @return \Symfony\Component\Routing\Route|null
-   *   The generated route, if available.
-   */
-  protected function getSettingsFormRoute(EntityTypeInterface $entity_type) {
-    if (!$entity_type->getBundleEntityType()) {
-      $route = new Route("/admin/structure/{$entity_type->id()}/settings");
+    if ($entity_type->hasLinkTemplate('add-page')) {
+      $route = new Route($entity_type->getLinkTemplate('add-page'));
       $route
         ->setDefaults([
-          '_form' => 'Drupal\locationentity\Form\LocationSettingsForm',
-          '_title' => "{$entity_type->getLabel()} settings",
+          '_controller' => 'Drupal\locationentity\Controller\LocationAddController::add',
+          '_title' => "Add {$entity_type->getLabel()}",
         ])
-        ->setRequirement('_permission', $entity_type->getAdminPermission())
+        ->setRequirement('_entity_create_access', $entity_type->id())
         ->setOption('_admin_route', TRUE);
 
       return $route;

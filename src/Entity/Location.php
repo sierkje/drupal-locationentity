@@ -47,11 +47,12 @@ use Drupal\user\UserInterface;
  *     "status" = "status",
  *   },
  *   links = {
- *     "canonical" = "//locationentity/{locationentity}",
- *     "add-form" = "//locationentity/add/{locationentity_type}",
- *     "edit-form" = "//locationentity/{locationentity}/edit",
- *     "delete-form" = "//locationentity/{locationentity}/delete",
- *     "collection" = "//locationentity",
+ *     "add-form" = "/locationentity/add/{locationentity_type}",
+ *     "add-page" = "/locationentity/add",
+ *     "canonical" = "/locationentity/{locationentity}",
+ *     "collection" = "/locationentity",
+ *     "delete-form" = "/locationentity/{locationentity}/delete",
+ *     "edit-form" = "/locationentity/{locationentity}/edit",
  *   },
  *   bundle_entity_type = "locationentity_type",
  *   field_ui_base_route = "entity.locationentity_type.edit_form"

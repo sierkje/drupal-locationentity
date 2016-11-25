@@ -2,11 +2,15 @@ locationentity.type.*:
   type: config_entity
   label: 'Location type'
   mapping:
-    id:
-      type: string
-      label: 'ID'
-    label:
-      type: label
-      label: 'Label'
     uuid:
       type: string
+      label: 'UUID of the location type'
+    id:
+      type: string
+      label: 'Machine-readable name of the location type'
+    label:
+      type: label
+      label: 'Name of the location type'
+    description:
+      type: text
+      label: 'Description of the location type'

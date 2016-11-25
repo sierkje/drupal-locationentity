@@ -40,18 +40,41 @@ use Drupal\locationentity\LocationTypeInterface;
  * )
  */
 class LocationType extends ConfigEntityBundleBase implements LocationTypeInterface {
+
+
   /**
-   * The Location type ID.
+   * The UUID of the location type.
+   *
+   * @var string
+   */
+  protected $uuid;
+
+  /**
+   * The machine-readable name of the location type.
    *
    * @var string
    */
   protected $id;
 
   /**
-   * The Location type label.
+   * The name of the location type.
    *
    * @var string
    */
   protected $label;
+
+  /**
+   * The description of the location type.
+   *
+   * @var string
+   */
+  protected $description;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDescription() {
+    return $this->description;
+  }
 
 }

@@ -1,0 +1,9 @@
+name: Location Entity Test
+type: module
+description: 'Provides functionality for testing locationentity module.'
+package: Testing
+
+# @todo Remove lines below before 8.x-1.x.
+version: 8.x-0.x-dev
+core: 8.x
+project: locationentity

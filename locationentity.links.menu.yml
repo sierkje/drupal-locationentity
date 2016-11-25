@@ -3,7 +3,7 @@ entity.locationentity.collection:
   title: 'Location list'
   route_name: entity.locationentity.collection
   description: 'List Location entities'
-  parent: system.admin_structure
+  parent: system.admin_content
   weight: 100
 
 # Location type menu items definition

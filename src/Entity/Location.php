@@ -50,7 +50,7 @@ use Drupal\user\UserInterface;
  *     "add-form" = "/locationentity/add/{locationentity_type}",
  *     "add-page" = "/locationentity/add",
  *     "canonical" = "/locationentity/{locationentity}",
- *     "collection" = "/locationentity",
+ *     "collection" = "/admin/content/locationentity",
  *     "delete-form" = "/locationentity/{locationentity}/delete",
  *     "edit-form" = "/locationentity/{locationentity}/edit",
  *   },

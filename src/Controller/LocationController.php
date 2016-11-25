@@ -12,11 +12,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 
 /**
- * Class LocationAddController.
+ * Class LocationController.
  *
  * @package Drupal\locationentity\Controller
  */
-class LocationAddController extends ControllerBase {
+class LocationController extends ControllerBase {
     public function __construct(EntityStorageInterface $storage, EntityStorageInterface $type_storage) {
       $this->storage = $storage;
       $this->typeStorage = $type_storage;

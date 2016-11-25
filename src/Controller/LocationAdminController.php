@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Returns responses for location routes.
  */
-class LocationController implements ContainerInjectionInterface {
+class LocationAdminController implements ContainerInjectionInterface {
 
   use StringTranslationTrait;
 

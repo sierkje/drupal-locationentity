@@ -4,7 +4,7 @@ namespace Drupal\locationentity\Routing;
 
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
-use Drupal\locationentity\Controller\LocationController;
+use Drupal\locationentity\Controller\LocationAdminController;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -70,8 +70,8 @@ class LocationHtmlRouteProvider extends AdminHtmlRouteProvider {
       // Content entities with bundles are added via a dedicated controller.
       $route
         ->setDefaults([
-          '_controller' => LocationController::class .'::addForm',
-          '_title_callback' => LocationController::class .'::addFormTitle',
+          '_controller' => LocationAdminController::class .'::addForm',
+          '_title_callback' => LocationAdminController::class .'::addFormTitle',
         ])
         ->setRequirement('_entity_create_access', $entity_type_id . ':{' . $bundle_entity_type_id . '}');
       $parameters[$bundle_entity_type_id] = ['type' => 'entity:' . $bundle_entity_type_id];
@@ -92,7 +92,7 @@ class LocationHtmlRouteProvider extends AdminHtmlRouteProvider {
       $route = new Route($entity_type->getLinkTemplate('add-page'));
       $route
         ->setDefaults([
-          '_controller' => LocationController::class .'::addPage',
+          '_controller' => LocationAdminController::class .'::addPage',
           '_title' => "Add {$entity_type->getLabel()}",
         ])
         ->setRequirement('_entity_create_access', $entity_type->id())

@@ -77,6 +77,36 @@ class LocationAdminController implements ContainerInjectionInterface {
   }
 
   /**
+   * Presents the creation form for locations of given type.
+   *
+   * @param EntityInterface $locationentity_type
+   *   The entity representing the type of the new location.
+   *
+   * @return array
+   *   A form array as expected by drupal_render().
+   */
+  public function addForm(EntityInterface $locationentity_type) {
+    $entity = $this->storage->create(['type' => $locationentity_type->id()]);
+
+    return $this->entityFormBuilder->getForm($entity);
+  }
+
+  /**
+   * Returns the creation form page title for for locations of given type.
+   *
+   * @param EntityInterface $locationentity_type
+   *   The entity representing the type of the new location.
+   *
+   * @return string
+   *   A page title.
+   */
+  public function addFormTitle(EntityInterface $locationentity_type) {
+    return $this->t('Create location of type @label',
+      ['@label' => $locationentity_type->label()]
+    );
+  }
+
+  /**
    * Displays links to the location creation forms for types.
    *
    * Presents a creation form if only one type is available.
@@ -106,36 +136,6 @@ class LocationAdminController implements ContainerInjectionInterface {
     }
 
     return ['#theme' => 'locationentity_add_list', '#content' => $types];
-  }
-
-  /**
-   * Presents the creation form for locations of given type.
-   *
-   * @param EntityInterface $locationentity_type
-   *   The entity representing the type of the new location.
-   *
-   * @return array
-   *   A form array as expected by drupal_render().
-   */
-  public function addForm(EntityInterface $locationentity_type) {
-    $entity = $this->storage->create(['type' => $locationentity_type->id()]);
-
-    return $this->entityFormBuilder->getForm($entity);
-  }
-
-  /**
-   * Returns the creation form page title for for locations of given type.
-   *
-   * @param EntityInterface $locationentity_type
-   *   The entity representing the type of the new location.
-   *
-   * @return string
-   *   A page title.
-   */
-  public function addFormTitle(EntityInterface $locationentity_type) {
-    return $this->t('Create location of type @label',
-      ['@label' => $locationentity_type->label()]
-    );
   }
 
 }

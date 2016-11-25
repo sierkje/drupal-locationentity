@@ -2,104 +2,177 @@
 
 namespace Drupal\locationentity\Routing;
 
+use Drupal\Core\Entity\Controller\EntityController;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
+use Drupal\Core\Entity\Routing\EntityRouteProviderInterface;
 use Drupal\locationentity\Controller\LocationAdminController;
 use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Provides routes for Location entities.
- *
- * @see Drupal\Core\Entity\Routing\AdminHtmlRouteProvider
- * @see Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider
+ * Provides routes for location entities.
  */
-class LocationHtmlRouteProvider extends AdminHtmlRouteProvider {
+class LocationHtmlRouteProvider implements EntityRouteProviderInterface {
+
+  /**
+   * The location entity definition.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeInterface
+   */
+  protected $entityType;
+
   /**
    * {@inheritdoc}
    */
   public function getRoutes(EntityTypeInterface $entity_type) {
-    $collection = parent::getRoutes($entity_type);
+    $this->entityType = $entity_type;
+    $prefix = 'entity.locationentity.';
 
-    $entity_type_id = $entity_type->id();
-
-    if ($add_form_route = $this->getAddFormRoute($entity_type)) {
-      $collection->add("entity.{$entity_type_id}.add_form", $add_form_route);
-    }
-
-    $add_page_route = $this->getAddPageRoute($entity_type);
-    $collection->add("entity.{$entity_type_id}.add_page", $add_page_route);
-
-    if ($collection_route = $this->getCollectionRoute($entity_type)) {
-      $collection->add("entity.{$entity_type_id}.collection", $collection_route);
-    }
+    $collection = (new RouteCollection());
+    $collection->add($prefix . 'add_form', $this->addFormRoute());
+    $collection->add($prefix . 'add_page', $this->addPageRoute());
+    $collection->add($prefix . 'canonical', $this->canonicalRoute());
+    $collection->add($prefix . 'collection', $this->collectionRoute());
+    $collection->add($prefix . 'delete_form', $this->deleteFormRoute());
+    $collection->add($prefix . 'edit_form', $this->editFormRoute());
 
     return $collection;
   }
 
   /**
-   * {@inheritdoc}
+   * Returns the 'add_form' route.
+   *
+   * @return \Symfony\Component\Routing\Route
+   *   The generated route.
    */
-  protected function getCollectionRoute(EntityTypeInterface $entity_type) {
-    if ($entity_type->hasLinkTemplate('collection') && $entity_type->hasListBuilderClass()) {
-      $entity_type_id = $entity_type->id();
-      $route = new Route($entity_type->getLinkTemplate('collection'));
-      $route
-        ->setDefaults([
-          '_entity_list' => $entity_type_id,
-          '_title' => "{$entity_type->getLabel()} list",
-        ])
-        ->setRequirement('_permission', 'access locationentity overview')
-        ->setOption('_admin_route', TRUE);
-
-      return $route;
-    }
+  protected function addFormRoute() {
+    return (new Route($this->getPath('add_form')))
+      ->setDefaults([
+        '_controller' => LocationAdminController::class .'::addForm',
+        '_title_callback' => LocationAdminController::class .'::addFormTitle',
+      ])
+      ->setRequirement('_entity_create_access', 'locationentity:{locationentity_type}')
+      ->setOptions([
+        'parameters' => [
+          'locationentity' => ['type' => 'entity:locationentity'],
+          'locationentity_type' => ['type' => 'entity:locationentity_type'],
+        ],
+        '_admin_route' => TRUE
+      ]);
   }
 
   /**
-   * {@inheritdoc}
+   * Returns the 'add_page' route.
+   *
+   * @return \Symfony\Component\Routing\Route
+   *   The generated route.
    */
-  protected function getAddFormRoute(EntityTypeInterface $entity_type) {
-    if ($entity_type->hasLinkTemplate('add-form')) {
-      $entity_type_id = $entity_type->id();
-      $parameters = [
-        $entity_type_id => ['type' => 'entity:' . $entity_type_id],
-      ];
-
-      $route = new Route($entity_type->getLinkTemplate('add-form'));
-      $bundle_entity_type_id = $entity_type->getBundleEntityType();
-      // Content entities with bundles are added via a dedicated controller.
-      $route
-        ->setDefaults([
-          '_controller' => LocationAdminController::class .'::addForm',
-          '_title_callback' => LocationAdminController::class .'::addFormTitle',
-        ])
-        ->setRequirement('_entity_create_access', $entity_type_id . ':{' . $bundle_entity_type_id . '}');
-      $parameters[$bundle_entity_type_id] = ['type' => 'entity:' . $bundle_entity_type_id];
-
-      $route
-        ->setOption('parameters', $parameters)
-        ->setOption('_admin_route', TRUE);
-
-      return $route;
-    }
+  protected function addPageRoute() {
+    return (new Route($this->getPath('add_page')))
+      ->setDefaults([
+        '_controller' => LocationAdminController::class .'::addPage',
+        '_title' => 'Add location',
+      ])
+      ->setRequirement('_entity_create_access', 'locationentity')
+      ->setOption('_admin_route', TRUE);
   }
 
   /**
-   * {@inheritdoc}
+   * Returns the 'canonical' route.
+   *
+   * @return \Symfony\Component\Routing\Route
+   *   The generated route.
    */
-  protected function getAddPageRoute(EntityTypeInterface $entity_type) {
-    if ($entity_type->hasLinkTemplate('add-page')) {
-      $route = new Route($entity_type->getLinkTemplate('add-page'));
-      $route
-        ->setDefaults([
-          '_controller' => LocationAdminController::class .'::addPage',
-          '_title' => "Add {$entity_type->getLabel()}",
-        ])
-        ->setRequirement('_entity_create_access', $entity_type->id())
-        ->setOption('_admin_route', TRUE);
+  protected function canonicalRoute() {
+    return (new Route($this->getPath('canonical')))
+      ->setDefaults([
+        '_entity_view' => 'locationentity.full',
+        '_title_callback' => EntityController::class . '::title',
+      ])
+      ->setRequirements([
+        '_entity_access' => 'locationentity.view',
+        'locationentity' => '\d+',
+      ])
+      ->setOptions([
+        'parameters' => [
+          'locationentity' => ['type' => 'entity:locationentity'],
+        ],
+      ]);
+  }
 
-      return $route;
-    }
+  /**
+   * Returns the 'collection' route.
+   *
+   * @return \Symfony\Component\Routing\Route
+   *   The generated route.
+   */
+  protected function collectionRoute() {
+    return (new Route($this->getPath('collection')))
+      ->setDefaults([
+        '_entity_list' => 'locationentity',
+        '_title' => 'Locations',
+      ])
+      ->setRequirement('_permission', 'access locationentity overview')
+      ->setOption('_admin_route', TRUE);
+  }
+
+  /**
+   * Returns the 'delete_form' route.
+   *
+   * @return \Symfony\Component\Routing\Route
+   *   The generated route.
+   */
+  protected function deleteFormRoute() {
+    return (new Route($this->getPath('delete-form')))
+      ->setDefaults([
+        '_entity_form' => "locationentity.delete",
+        '_title_callback' => EntityController::class . '::deleteTitle',
+      ])
+      ->setRequirements([
+        '_entity_access' => 'locationentity.delete',
+        'locationentity' => '\d+',
+      ])
+      ->setOptions([
+        'parameters' => [
+          'locationentity' => ['type' => 'entity:locationentity'],
+        ],
+      ]);
+  }
+
+  /**
+   * Returns the 'edit_form' route.
+   *
+   * @return \Symfony\Component\Routing\Route
+   *   The generated route.
+   */
+  protected function editFormRoute() {
+    return (new Route($this->getPath('edit-form')))
+      ->setDefaults([
+        '_entity_form' => "locationentity.edit",
+        '_title_callback' => EntityController::class . '::editTitle',
+      ])
+      ->setRequirements([
+        '_entity_access' => 'locationentity.update',
+        'locationentity' => '\d+',
+      ])
+      ->setOptions([
+        'parameters' => [
+          'locationentity' => ['type' => 'entity:locationentity'],
+        ],
+      ]);
+  }
+
+  /**
+   * Gets the path for a given link type.
+   *
+   * @param string $link_template
+   *   The link type key.
+   *
+   * @return string
+   *   The path for this link.
+   */
+  protected function getPath($link_template) {
+    return $this->entityType->getLinkTemplate($link_template);
   }
 
 }

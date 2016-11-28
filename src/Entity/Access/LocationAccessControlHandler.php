@@ -1,11 +1,11 @@
 <?php
 
-namespace Drupal\locationentity;
+namespace Drupal\locationentity\Entity\Access;
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Access\AccessResult;
 
 /**
  * Access controller for the Location entity.

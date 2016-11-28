@@ -30,7 +30,7 @@ use Drupal\user\UserInterface;
  *       "edit" = "Drupal\locationentity\Form\LocationForm",
  *       "delete" = "Drupal\locationentity\Form\LocationDeleteForm",
  *     },
- *     "access" = "Drupal\locationentity\LocationAccessControlHandler",
+ *     "access" = "Drupal\locationentity\Entity\Access\LocationAccessControlHandler",
  *     "route_provider" = {
  *       "html" = "Drupal\locationentity\Entity\Routing\LocationHtmlRouteProvider",
  *     },

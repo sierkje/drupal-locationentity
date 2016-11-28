@@ -19,7 +19,7 @@ use Drupal\locationentity\LocationTypeInterface;
  *       "delete" = "Drupal\locationentity\Form\LocationTypeDeleteForm"
  *     },
  *     "route_provider" = {
- *       "html" = "Drupal\locationentity\Routing\LocationTypeHtmlRouteProvider",
+ *       "html" = "Drupal\locationentity\Entity\Routing\LocationTypeHtmlRouteProvider",
  *     },
  *   },
  *   config_prefix = "type",

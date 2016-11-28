@@ -32,7 +32,7 @@ use Drupal\user\UserInterface;
  *     },
  *     "access" = "Drupal\locationentity\LocationAccessControlHandler",
  *     "route_provider" = {
- *       "html" = "Drupal\locationentity\Routing\LocationHtmlRouteProvider",
+ *       "html" = "Drupal\locationentity\Entity\Routing\LocationHtmlRouteProvider",
  *     },
  *   },
  *   base_table = "locationentity",

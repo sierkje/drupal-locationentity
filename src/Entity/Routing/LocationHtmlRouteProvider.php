@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\locationentity\Routing;
+namespace Drupal\locationentity\Entity\Routing;
 
 use Drupal\Core\Entity\Controller\EntityController;
 use Drupal\Core\Entity\EntityTypeInterface;

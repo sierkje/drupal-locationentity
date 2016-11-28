@@ -12,7 +12,7 @@ use Drupal\locationentity\LocationTypeInterface;
  *   id = "locationentity_type",
  *   label = @Translation("Location type"),
  *   handlers = {
- *     "list_builder" = "Drupal\locationentity\LocationTypeListBuilder",
+ *     "list_builder" = "Drupal\locationentity\Entity\Listing\LocationTypeListBuilder",
  *     "form" = {
  *       "add" = "Drupal\locationentity\Form\LocationTypeForm",
  *       "edit" = "Drupal\locationentity\Form\LocationTypeForm",

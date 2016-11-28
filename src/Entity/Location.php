@@ -21,7 +21,7 @@ use Drupal\user\UserInterface;
  *   bundle_label = @Translation("Location type"),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
- *     "list_builder" = "Drupal\locationentity\LocationListBuilder",
+ *     "list_builder" = "Drupal\locationentity\Entity\Listing\LocationListBuilder",
  *     "views_data" = "Drupal\locationentity\LocationViewsData",
  *
  *     "form" = {

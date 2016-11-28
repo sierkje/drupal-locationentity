@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\locationentity;
+namespace Drupal\locationentity\Entity\Views;
 
 use Drupal\views\EntityViewsData;
 use Drupal\views\EntityViewsDataInterface;

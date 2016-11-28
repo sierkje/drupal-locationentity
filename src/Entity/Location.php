@@ -22,7 +22,7 @@ use Drupal\user\UserInterface;
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "list_builder" = "Drupal\locationentity\Entity\Listing\LocationListBuilder",
- *     "views_data" = "Drupal\locationentity\LocationViewsData",
+ *     "views_data" = "Drupal\locationentity\Entity\Views\LocationViewsData",
  *
  *     "form" = {
  *       "default" = "Drupal\locationentity\Form\LocationForm",

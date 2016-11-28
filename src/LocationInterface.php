@@ -12,72 +12,76 @@ use Drupal\user\EntityOwnerInterface;
  * @ingroup locationentity
  */
 interface LocationInterface extends ContentEntityInterface, EntityChangedInterface, EntityOwnerInterface {
-  // Add get/set methods for your configuration properties here.
+
   /**
-   * Gets the Location type.
+   * Denotes that the location is published.
+   */
+  const LOCATION_IS_PUBLISHED = 1;
+
+  /**
+   * Denotes that the location is not published.
+   */
+  const LOCATION_IS_UNPUBLISHED = 0;
+
+  /**
+   * Returns the location type.
    *
    * @return string
-   *   The Location type.
+   *   The machine-readable name of the type of the location.
    */
   public function getType();
 
   /**
-   * Gets the Location name.
+   * Returns the location name.
    *
    * @return string
-   *   Name of the Location.
+   *   The name of the location.
    */
   public function getName();
 
   /**
-   * Sets the Location name.
+   * Sets the location name.
    *
    * @param string $name
-   *   The Location name.
+   *   The name of the location.
    *
    * @return \Drupal\locationentity\LocationInterface
-   *   The called Location entity.
+   *   This location entity object.
    */
   public function setName($name);
 
   /**
-   * Gets the Location creation timestamp.
+   * Returns the time that the location was first created.
    *
    * @return int
-   *   Creation timestamp of the Location.
+   *   The timestamp of the first entity save operation.
    */
   public function getCreatedTime();
 
   /**
-   * Sets the Location creation timestamp.
+   * Indicates whether the location is published or not.
    *
-   * @param int $timestamp
-   *   The Location creation timestamp.
-   *
-   * @return \Drupal\locationentity\LocationInterface
-   *   The called Location entity.
-   */
-  public function setCreatedTime($timestamp);
-
-  /**
-   * Returns the Location published status indicator.
-   *
-   * Unpublished Location are only visible to restricted users.
+   * Unpublished locations are only visible to restricted users.
    *
    * @return bool
-   *   TRUE if the Location is published.
+   *   TRUE if the location is published, FALSE if it is unpublished.
    */
   public function isPublished();
 
   /**
-   * Sets the published status of a Location.
-   *
-   * @param bool $published
-   *   TRUE to set this Location to published, FALSE to set it to unpublished.
+   * Publish the location.
    *
    * @return \Drupal\locationentity\LocationInterface
-   *   The called Location entity.
+   *   This location entity object.
    */
-  public function setPublished($published);
+  public function publish();
+
+  /**
+   * Unpublish the location.
+   *
+   * @return \Drupal\locationentity\LocationInterface
+   *   This location entity object.
+   */
+  public function unpublish();
 
 }

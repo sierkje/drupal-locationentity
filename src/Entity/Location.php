@@ -40,7 +40,7 @@ use Drupal\user\UserInterface;
  *   entity_keys = {
  *     "id" = "id",
  *     "bundle" = "type",
- *     "label" = "name",
+ *     "label" = "organization",
  *     "uuid" = "uuid",
  *     "uid" = "user_id",
  *     "langcode" = "langcode",
@@ -102,14 +102,6 @@ class Location extends ContentEntityBase implements LocationInterface {
   /**
    * {@inheritdoc}
    */
-  public function setCreatedTime($timestamp) {
-    $this->set('created', $timestamp);
-    return $this;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getOwner() {
     return $this->get('user_id')->entity;
   }
@@ -147,8 +139,23 @@ class Location extends ContentEntityBase implements LocationInterface {
   /**
    * {@inheritdoc}
    */
-  public function setPublished($published) {
-    $this->set('status', $published ? NODE_PUBLISHED : NODE_NOT_PUBLISHED);
+  public function publish() {
+    // Do not trigger any listeners if the location is already published.
+    if (!$this->isPublished()) {
+      $this->set('status', self::LOCATION_IS_PUBLISHED);
+    }
+
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function unpublish() {
+    // Do not trigger any listeners if the location is not actually published.
+    if (!$this->isPublished()) {
+      $this->set('status', self::LOCATION_IS_UNPUBLISHED);
+    }
     return $this;
   }
 
@@ -240,5 +247,7 @@ class Location extends ContentEntityBase implements LocationInterface {
 
     return $fields;
   }
+
+
 
 }

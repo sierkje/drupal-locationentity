@@ -1,11 +1,12 @@
-entity.locationentity.canonical:
-  route_name: entity.locationentity.canonical
-  base_route: entity.locationentity.canonical
-  title: 'View'
 entity.locationentity.collection:
   route_name: entity.locationentity.collection
   base_route: system.admin_content
   title: 'Locations'
+
+entity.locationentity.canonical:
+  route_name: entity.locationentity.canonical
+  base_route: entity.locationentity.canonical
+  title: 'View'
 entity.locationentity.edit_form:
   route_name: entity.locationentity.edit_form
   base_route: entity.locationentity.canonical
@@ -15,4 +16,13 @@ entity.locationentity.delete_form:
   base_route:  entity.locationentity.canonical
   title: 'Delete'
   weight: 10
+
+entity.locationentity_type.edit_form:
+  route_name: entity.locationentity_type.edit_form
+  base_route: entity.locationentity_type.edit_form
+  title: 'Edit'
+entity.node_type.collection:
+  route_name: entity.locationentity_type.collection
+  base_route: entity.locationentity_type.collection
+  title: 'List'
 

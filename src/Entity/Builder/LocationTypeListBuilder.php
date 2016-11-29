@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\locationentity\Entity\Listing;
+namespace Drupal\locationentity\Entity\Builder;
 
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;

@@ -31,6 +31,7 @@ use Drupal\user\UserInterface;
  *     "storage" = "Drupal\locationentity\Entity\Storage\LocationSqlStorage",
  *     "storage_schema" = "Drupal\locationentity\Entity\Storage\LocationSqlStorageSchema",
  *     "view_builder" = "Drupal\locationentity\Entity\Builder\LocationViewBuilder",
+ *     "list_builder" = "Drupal\locationentity\Entity\Builder\LocationListBuilder",
  *     "access" = "Drupal\locationentity\Entity\Access\LocationAccessControlHandler",
  *     "views_data" = "Drupal\locationentity\Entity\Views\LocationViewsData",
  *     "form" = {
@@ -42,7 +43,6 @@ use Drupal\user\UserInterface;
  *     "route_provider" = {
  *       "html" = "Drupal\locationentity\Entity\Routing\LocationHtmlRouteProvider",
  *     },
- *     "list_builder" = "Drupal\locationentity\Entity\Listing\LocationListBuilder",
  *     "translation" = "Drupal\locationentity\Entity\Translation\LocationTranslationHandler",
  *   },
  *   entity_keys = {

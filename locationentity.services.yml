@@ -1,3 +1,0 @@
-services:
-  locationentity.messenger:
-    class: \Drupal\locationentity\Messenger\ProceduralWrapperMessenger

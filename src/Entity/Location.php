@@ -7,44 +7,52 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\locationentity\LocationInterface;
 use Drupal\user\UserInterface;
 
 /**
- * Defines the Location entity.
+ * Defines the location entity.
  *
  * @ingroup locationentity
  *
  * @ContentEntityType(
  *   id = "locationentity",
+ *   bundle_entity_type = "locationentity_type",
  *   label = @Translation("Location"),
+ *   label_singular = @Translation("location"),
+ *   label_plural = @Translation("locations"),
+ *   label_count = @PluralTranslation(
+ *     singular = "@count location",
+ *     plural = "@count locations"
+ *   ),
  *   bundle_label = @Translation("Location type"),
  *   handlers = {
- *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
- *     "list_builder" = "Drupal\locationentity\Entity\Listing\LocationListBuilder",
+ *     "storage" = "Drupal\locationentity\Entity\Storage\LocationSqlStorage",
+ *     "storage_schema" = "Drupal\locationentity\Entity\Storage\LocationSqlStorageSchema",
+ *     "view_builder" = "Drupal\locationentity\Entity\Builder\LocationViewBuilder",
+ *     "access" = "Drupal\locationentity\Entity\Access\LocationAccessControlHandler",
  *     "views_data" = "Drupal\locationentity\Entity\Views\LocationViewsData",
- *
  *     "form" = {
  *       "default" = "Drupal\locationentity\Form\LocationForm",
  *       "add" = "Drupal\locationentity\Form\LocationForm",
  *       "edit" = "Drupal\locationentity\Form\LocationForm",
  *       "delete" = "Drupal\locationentity\Form\LocationDeleteForm",
  *     },
- *     "access" = "Drupal\locationentity\Entity\Access\LocationAccessControlHandler",
  *     "route_provider" = {
  *       "html" = "Drupal\locationentity\Entity\Routing\LocationHtmlRouteProvider",
  *     },
+ *     "list_builder" = "Drupal\locationentity\Entity\Listing\LocationListBuilder",
+ *     "translation" = "Drupal\locationentity\Entity\Translation\LocationTranslationHandler",
  *   },
- *   base_table = "locationentity",
- *   admin_permission = "administer locationentity",
  *   entity_keys = {
  *     "id" = "id",
  *     "bundle" = "type",
  *     "label" = "name",
- *     "uuid" = "uuid",
- *     "uid" = "user_id",
  *     "langcode" = "langcode",
+ *     "uuid" = "uuid",
  *     "status" = "status",
+ *     "uid" = "user_id",
  *   },
  *   links = {
  *     "add-form" = "/locationentity/add/{locationentity_type}",
@@ -54,12 +62,17 @@ use Drupal\user\UserInterface;
  *     "delete-form" = "/locationentity/{locationentity}/delete",
  *     "edit-form" = "/locationentity/{locationentity}/edit",
  *   },
- *   bundle_entity_type = "locationentity_type",
- *   field_ui_base_route = "entity.locationentity_type.edit_form"
+ *   base_table = "locationentity_data",
+ *   data_table = "locationentity_field_data",
+ *   translatable = TRUE,
+ *   admin_permission = "administer locationentity",
+ *   field_ui_base_route = "entity.locationentity_type.edit_form",
  * )
  */
 class Location extends ContentEntityBase implements LocationInterface {
+
   use EntityChangedTrait;
+
   /**
    * {@inheritdoc}
    */
@@ -163,91 +176,69 @@ class Location extends ContentEntityBase implements LocationInterface {
    * {@inheritdoc}
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
-    $fields['id'] = BaseFieldDefinition::create('integer')
-      ->setLabel(t('ID'))
-      ->setDescription(t('The ID of the Location entity.'))
-      ->setReadOnly(TRUE);
-    $fields['type'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Type'))
-      ->setDescription(t('The Location type/bundle.'))
-      ->setSetting('target_type', 'locationentity_type')
-      ->setRequired(TRUE);
-    $fields['uuid'] = BaseFieldDefinition::create('uuid')
-      ->setLabel(t('UUID'))
-      ->setDescription(t('The UUID of the Location entity.'))
-      ->setReadOnly(TRUE);
+    /** @var \Drupal\Core\Field\BaseFieldDefinition[] $fields */
+    $fields = parent::baseFieldDefinitions($entity_type);
 
-    $fields['user_id'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Authored by'))
-      ->setDescription(t('The user ID of author of the Location entity.'))
-      ->setRevisionable(TRUE)
-      ->setSetting('target_type', 'user')
-      ->setSetting('handler', 'default')
-      ->setDefaultValueCallback('Drupal\node\Entity\Node::getCurrentUserId')
-      ->setTranslatable(TRUE)
-      ->setDisplayOptions('view', [
-        'label' => 'hidden',
-        'type' => 'author',
-        'weight' => 0,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'weight' => 5,
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => '60',
-          'autocomplete_type' => 'tags',
-          'placeholder' => '',
-        ],
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+    // Field defined in parent method for entity key 'id'.
+    $fields['id']
+      ->setDescription(new TranslatableMarkup('The ID of the location.'));
+
+    // Field defined in parent method for entity key 'uuid'.
+    $fields['uuid']
+      ->setDescription(new TranslatableMarkup('The UUID of the location.'));
+
+    // Field defined in parent method for entity key 'langcode'.
+    $fields['langcode']
+      ->setDescription(new TranslatableMarkup('The language code for the location.'));
+
+    // Field defined in parent method for entity key 'bundle'.
+    $fields['type']
+      ->setDescription(new TranslatableMarkup('The type of the location.'));
 
     $fields['name'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Name'))
-      ->setDescription(t('The name of the Location entity.'))
-      ->setSettings([
-        'max_length' => 50,
-        'text_processing' => 0,
-      ])
-      ->setDefaultValue('')
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'string',
-        'weight' => -4,
-      ])
+      ->setLabel(new TranslatableMarkup('Name'))
+      ->setDescription(new TranslatableMarkup('The name of the location.'))
+      ->setRequired(TRUE)
+      ->setTranslatable(TRUE)
+      ->setSetting('max_length', 255)
+      ->setSetting('text_processing', 0)
       ->setDisplayOptions('form', [
         'type' => 'string_textfield',
-        'weight' => -4,
+        'weight' => -50,
       ])
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['user_id'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(new TranslatableMarkup('Authored by'))
+      ->setDescription(new TranslatableMarkup('The username of the author of the location.'))
+      ->setTranslatable(TRUE)
+      ->setSetting('target_type', 'user')
+      ->setSetting('handler', 'default:user')
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDefaultValueCallback(static::class . '::getCurrentUserId');
+
+    $fields['status'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(new TranslatableMarkup('Publishing status'))
+      ->setDescription(new TranslatableMarkup('A boolean indicating whether the location is published.'))
+      ->setTranslatable(TRUE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDefaultValue(TRUE);
+
+    $fields['created'] = BaseFieldDefinition::create('created')
+      ->setLabel(new TranslatableMarkup('Created'))
+      ->setDescription(new TranslatableMarkup('The time that the location was first created.'))
+      ->setTranslatable(TRUE)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['status'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Publishing status'))
-      ->setDescription(t('A boolean indicating whether the Location is published.'))
-      ->setDefaultValue(TRUE);
-
-    $fields['langcode'] = BaseFieldDefinition::create('language')
-      ->setLabel(t('Language code'))
-      ->setDescription(t('The language code for the Location entity.'))
-      ->setDisplayOptions('form', [
-        'type' => 'language_select',
-        'weight' => 10,
-      ])
-      ->setDisplayConfigurable('form', TRUE);
-
-    $fields['created'] = BaseFieldDefinition::create('created')
-      ->setLabel(t('Created'))
-      ->setDescription(t('The time that the entity was created.'));
-
     $fields['changed'] = BaseFieldDefinition::create('changed')
-      ->setLabel(t('Changed'))
-      ->setDescription(t('The time that the entity was last edited.'));
+      ->setLabel(new TranslatableMarkup('Last updated'))
+      ->setDescription(new TranslatableMarkup('The time that the location was last updated.'))
+      ->setTranslatable(TRUE)
+      ->setDisplayConfigurable('view', TRUE);
 
     return $fields;
   }
-
-
 
 }

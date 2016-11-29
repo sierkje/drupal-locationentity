@@ -129,7 +129,7 @@ class ProceduralWrapperMessenger extends PassiveMessenger implements LocationMes
    * @return bool
    *   TRUE if drupal_set_message() and drupal_get_messages() are available.
    */
-  protected function drupalSetMessageExists() {
+  public function drupalSetMessageExists() {
     if ($this->drupal_set_message_exists === NULL) {
       $this->drupal_set_message_exists = FALSE;
 

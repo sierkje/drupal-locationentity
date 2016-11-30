@@ -26,7 +26,7 @@ class LocationForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    parent::save($form, $form_state);
+    $status = parent::save($form, $form_state);
 
     $this->addStatusMessage($this->t('Saved location <em>%label</em>.', [
       '%label' => $this->entity->label(),
@@ -35,6 +35,8 @@ class LocationForm extends ContentEntityForm {
     $form_state->setRedirect('entity.locationentity.canonical', [
       'locationentity' => $this->entity->id(),
     ]);
+
+    return $status;
   }
 
 }
